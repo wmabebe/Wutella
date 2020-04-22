@@ -1,7 +1,7 @@
 # Wutella
 Gnutella like p2p application for file sharing
 
-Compile: java *.java
+Compile: javac *.java
 
 Run node0: java Node port /path/to/sharedDIR
 Run nodeX: java Node port /path/to/sharedDIR node0_ip node0_port
@@ -28,9 +28,15 @@ Details:
 
 Explanation:
 
-All nodes are equal. However, the very first node doesn't require the address of another node. 
-Obviously it's the only one in the network. Other nodes will need to know the address of one
+All nodes are equal. However, the very first node doesn't require the address of another node 
+to join the network as it the very first node. Other nodes are required to know the address of one
 active node to join the network.
+
+Protocol:
+
+There are four communication commands. Namely, PING, PONG, QUERY and QUERYHIT.
+These commands are sent over the udp overlay netowrk. The commands are wrapped inside
+a serializable class called Message.
 
 1. Nodes will maintain a list of neighbors. (set to Max=2 neighbors)
 2. Nodes PING neighbors every 5 seconds.
@@ -40,8 +46,8 @@ active node to join the network.
   - This list can be used to further contact other nodes.
   - If the neighbors list is full however, nodes in this list will be added to the pool.
   - Whenever neighbors TIMEOUT, the node can contact another node from its pool to fill up its neighbors list.
-4. A node can query the network by passing the queryFileName argument as shown above. The query will propagate
-   through the network until a HIT is made. A node that has the requested file will establish a TCP connection
+4. A node can QUERY the network by passing the queryFileName argument as shown above. The query will propagate
+   through the network until a QUERYHIT is made. A node that has the requested file will establish a TCP connection
    with the requesting node to transfer the file.
 
 Observations:
