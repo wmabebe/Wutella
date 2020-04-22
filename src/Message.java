@@ -1,9 +1,7 @@
 import java.io.Serializable;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Stack;
 /**
  * This class represents the messages that
  * are transmitted amongst nodes. There are
@@ -23,28 +21,14 @@ public class Message implements Serializable {
 	/**
 	 * Message descriptor values are final ints
 	 */
-	public static final int PING = 1 , PONG = 2, QUERY = 4, QUERYHIT = 8, GET = 16, PUSH = 32, REPLY = 64;
+	public static final int PING = 1 , PONG = 2, QUERY = 4, QUERYHIT = 8;
 	private int descriptor;
-	
-	/**
-	 * Message initiator's ip address value
-	 */
-	private String host;
-	/**
-	 * Message initiator's port value.
-	 */
 	
 	/**
 	 * Query search string associated with a QUERY message.
 	 * Also, response search string associated with REPLY.
 	 */
 	private String search;
-	
-	/**
-	 * Node's port number. This also gets added indirectly.
-	 * (inside the bottom most neighbor object in the stack)
-	 */
-	private int port;
 	
 	/**
 	 * Time to live value for current message;
@@ -77,14 +61,12 @@ public class Message implements Serializable {
 	public Message(Neighbor n,int descriptor,int port) throws UnknownHostException {
 		if (descriptor != 1 && descriptor != 2 && descriptor != 4 && descriptor != 8 && descriptor != 16 && descriptor != 32 && descriptor != 64)
 			throw new IllegalArgumentException("Unknown message descriptor value!\n Choose from [1,2,4,8,16]");
-		if (port < 1024 || port > 65535)
-			throw new IllegalArgumentException("Port has to be in range 1024 - 65535!");
+		if (port < 1024 || port > 64535)
+			throw new IllegalArgumentException("Port has to be in range 1024 - 64535!");
 		Random rand = new Random();
 		//Safe to assume 0 id collision
 		this.id = rand.nextLong();
 		this.descriptor = descriptor;
-		this.host = InetAddress.getLocalHost().getHostAddress();
-		this.port = port;
 		this.originator = n;
 	}
 	
@@ -106,22 +88,6 @@ public class Message implements Serializable {
 	public int getDescriptor() {
 		this.TTL --;
 		return this.descriptor;
-	}
-	
-	/**
-	 * Get message port value.
-	 * @return port 
-	 */
-	public int getPort() {
-		return this.port;
-	}
-	
-	/**
-	 * Get message host value.
-	 * @return
-	 */
-	public String getHost() {
-		return this.host;
 	}
 	
 	/**

@@ -29,7 +29,7 @@ public class Reaper extends Thread {
 				Iterator<Neighbor> iter = this.node.getNeighbors().iterator();
 				while (iter.hasNext()) {
 					Neighbor n = iter.next();
-					if (node.live.get(n.getId()) != null && System.currentTimeMillis() - node.live.get(n.getId())  >= (4 * 1000 * Node.SLEEP_TIME)) {
+					if (node.live.get(n) != null && System.currentTimeMillis() - node.live.get(n)  >= (4 * 1000 * Node.SLEEP_TIME)) {
 						//Remove from neighbors list
 						iter.remove();
 						//Remove from pool so it won't resurface into in the

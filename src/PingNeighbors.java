@@ -70,8 +70,8 @@ class PingNeighbors extends Thread{
 			try {
 				//Rest every 100 PINGS for 2 x SLEEP_TIME and clear caches
 				Thread.sleep(node.PING_CACHE.size() >= 100 ? 1000 * Node.SLEEP_TIME : 1000 * Node.SLEEP_TIME * 2);
-				//Reset PING, QUERY and GET message caches.
-				//These PINGs QUERies and GETs are sent by this node.
+				//Reset PING and QUERY message caches.
+				//These PINGs and QUERies are sent by this node.
 				synchronized(this.node.PING_CACHE) {
 					if (node.PING_CACHE.size() >= 100) {
 						node.PING_CACHE.clear();
@@ -80,11 +80,6 @@ class PingNeighbors extends Thread{
 				synchronized(this.node.QUERY_CACHE) {
 					if (node.QUERY_CACHE.size() >= 100){
 						node.QUERY_CACHE.clear();
-					}
-				}
-				synchronized(this.node.GET_CACHE) {
-					if (node.GET_CACHE.size() >= 100) {
-						node.GET_CACHE.clear();
 					}
 				}
 			} catch (InterruptedException e) {
